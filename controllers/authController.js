@@ -141,7 +141,6 @@ exports.isValidToken = async (req, res, next) => {
       });
     else {
       req.user = verified;
-      console.log(verified);
       next();
     }
   } catch (err) {
@@ -172,9 +171,26 @@ exports.isValidClient = (req, res, next) => {
   })
 }
 
+exports.isValidAdmin = (req, res, next) => {
+  this.isValidToken(req, res, async () => {
+    if (req.user.id && req.user.role == 'admin') {
+      const admin = await Admin.findOne({ _id: req.user.id });
+      if (!admin)
+        return res.status(401).json({
+          success: false,
+          result: null,
+          message: "Admin doens't Exist, authorization denied.",
+          jwtExpired: true,
+        });
+      next()
+    } else {
+      return res.status(403).json("ur not allowed to do that ")
+    }
+  })
+}
+
 exports.isValidProvider = (req, res, next) => {
   this.isValidToken(req, res, async () => {
-    console.log(req.user)
     if (req.user.id && req.user.role == 'provider') {
       const provider = await Provider.findOne({ _id: req.user.id });
       if (!provider)
@@ -193,7 +209,6 @@ exports.isValidProvider = (req, res, next) => {
 
 exports.isValidClient = (req, res, next) => {
   this.isValidToken(req, res, async () => {
-    console.log(req.user)
     if (req.user.id && req.user.role == 'client') {
       const client = await Client.findOne({ _id: req.user.id });
       if (!client)

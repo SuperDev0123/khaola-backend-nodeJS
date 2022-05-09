@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Admin = mongoose.model("Admin");
+const CallReserve = require("../models/CallReserve")
 
 /**
  *  Get all documents of a Model
@@ -382,5 +383,16 @@ exports.search = async (req, res) => {
       result: [],
       message: "Oops there is an Error",
     });
+  }
+};
+
+exports.reserve_list = async (req, res) => {
+  try {
+    const date = req.query.page;
+    const reserveList = await CallReserve.find({ reserveTime: { $regex: '.*' + date + '.*' } }).populate('userId')
+    res.status(200).send({ success: true, message: "", result: reserveList })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ success: false, message: "Internal server error", error: error })
   }
 };

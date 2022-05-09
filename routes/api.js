@@ -2,12 +2,12 @@ const express = require("express");
 const { catchErrors } = require("../handlers/errorHandlers");
 
 const router = express.Router();
-const { isValidToken, isValidProvider, isValidClient } = require("../controllers/authController");
+const { isValidToken, isValidProvider, isValidClient, isValidAdmin } = require("../controllers/authController");
 
 const adminController = require("../controllers/adminController");
 const clientController = require("../controllers/clientController");
 
-const leadController = require("../controllers/leadController");
+const providerController = require("../controllers/providerController");
 const productController = require("../controllers/productController");
 const authControllerDemo = require("../controllers/authControllerDemo");
 
@@ -19,7 +19,7 @@ router.route("/admin/update/:id").patch(catchErrors(adminController.update));
 router.route("/admin/delete/:id").delete(catchErrors(adminController.delete));
 router.route("/admin/search").get(catchErrors(adminController.search));
 router.route("/admin/list").get(catchErrors(adminController.list));
-
+router.route("/admin/reserve/list").get(isValidAdmin, catchErrors(adminController.reserve_list));
 router
   .route("/admin/password-update/:id")
   .patch(catchErrors(adminController.updatePassword));
@@ -32,20 +32,22 @@ router.route("/client/update/:id").patch(catchErrors(clientController.update));
 router.route("/client/delete/:id").delete(catchErrors(clientController.delete));
 router.route("/client/search").get(catchErrors(clientController.search));
 router.route("/client/list").get(catchErrors(clientController.list));
-router.route("/client/reset_verify").post(isValidProvider, catchErrors(authControllerDemo.reset_verify));
-router.route("/client/reset_status").post(isValidProvider, catchErrors(authControllerDemo.reset_status));
-router.route("/client/reserve/list").get(isValidClient, catchErrors(authControllerDemo.reserve_list));
-router.route("/client/reserve_call").post(isValidClient, catchErrors(authControllerDemo.reserve_call));
-router.route("/client/verify").post(isValidClient, catchErrors(authControllerDemo.verify_client));
-router.route("/client/is_verify").get(isValidClient, catchErrors(authControllerDemo.is_verify));
+router.route("/client/my_list").get(isValidProvider, catchErrors(clientController.myList));
+router.route("/client/register").post(isValidProvider, catchErrors(clientController.registerClient));
+router.route("/client/reset_verify").post(isValidAdmin, catchErrors(clientController.reset_verify));
+router.route("/client/reset_status").post(isValidProvider, catchErrors(clientController.reset_status));
+router.route("/client/reserve/list").get(isValidClient, catchErrors(clientController.reserve_list));
+router.route("/client/reserve_call").post(isValidClient, catchErrors(clientController.reserve_call));
+router.route("/client/verify").post(isValidClient, catchErrors(clientController.verify_client));
+router.route("/client/is_verify").get(isValidClient, catchErrors(clientController.is_verify));
 
-//_____________________________________ API for leads ___________________________
-router.route("/lead/create").post(catchErrors(leadController.create));
-router.route("/lead/read/:id").get(catchErrors(leadController.read));
-router.route("/lead/update/:id").patch(catchErrors(leadController.update));
-router.route("/lead/delete/:id").delete(catchErrors(leadController.delete));
-router.route("/lead/search").get(catchErrors(leadController.search));
-router.route("/lead/list").get(catchErrors(leadController.list));
+//_____________________________________ API for providers ___________________________
+router.route("/provider/create").post(catchErrors(providerController.create));
+router.route("/provider/read/:id").get(catchErrors(providerController.read));
+router.route("/provider/update/:id").patch(catchErrors(providerController.update));
+router.route("/provider/delete/:id").delete(catchErrors(providerController.delete));
+router.route("/provider/search").get(catchErrors(providerController.search));
+router.route("/provider/list").get(isValidAdmin, catchErrors(providerController.list));
 
 //_____________________________________ API for products ___________________________
 router.route("/product/create").post(catchErrors(productController.create));

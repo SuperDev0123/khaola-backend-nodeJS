@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
+const Schema = mongoose.Schema;
 
-const clientSchema = new mongoose.Schema({
+const clientSchema = new Schema({
   firstName: {
     type: String,
     trim: true,
@@ -63,6 +64,11 @@ const clientSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },  
+  provider: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: "Provider",
+	},
 });
 
 module.exports = mongoose.model("Client", clientSchema);

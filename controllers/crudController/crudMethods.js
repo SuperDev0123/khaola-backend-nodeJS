@@ -129,13 +129,13 @@ exports.delete = async (Model, req, res) => {
       return res.status(404).json({
         success: false,
         result: null,
-        message: "No document found by this id: " + req.params.id,
+        message: "No document found",
       });
     } else {
       return res.status(200).json({
         success: true,
         result,
-        message: "Successfully Deleted the document by id: " + req.params.id,
+        message: "Successfully Deleted",
       });
     }
   } catch {
