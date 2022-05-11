@@ -165,3 +165,16 @@ exports.verifyClient = async (req, res) => {
     res.status(500).send({ success: false, message: "Internal server error", error: error })
   }
 };
+
+exports.inMeeting = async (req, res) => {
+  try {
+    await CallReserve.updateOne({ userId: req.body.client_id }, { status: true })
+    res.json({
+      success: true,
+      result: {},
+      message: "Redirect to Google meet url",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error register in" })
+  }
+};

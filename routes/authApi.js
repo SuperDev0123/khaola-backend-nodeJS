@@ -9,7 +9,7 @@ const {
   logout,
 } = require("../controllers/authController");
 
-const { login, registerProvider, registerClient, verifyProvider, verifyClient } = require("../controllers/authControllerDemo");
+const { login, registerProvider, registerClient, inMeeting, verifyClient } = require("../controllers/authControllerDemo");
 
 // use {login } from authController , uncomment line below
 
@@ -19,6 +19,7 @@ const { login, registerProvider, registerClient, verifyProvider, verifyClient } 
 router.route("/login").post(catchErrors(login));
 router.route("/register").post(catchErrors(registerProvider));
 router.route("/client/verify/:id/:token").get(catchErrors(verifyClient))
+router.route("/meeting").post(catchErrors(inMeeting))
 router.route("/logout").post(isValidToken, catchErrors(logout));
 
 module.exports = router;
