@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const crypto = require("crypto")
 const methods = require("./crudController");
 const moment = require("moment")
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const Meeting = require('google-meet-api').meet;
 const passport = require('passport')
 
 const providerModel = require("../models/Provider")
@@ -73,7 +73,7 @@ module.exports.verifyList = async (req, res) => {
         message: "Collection is Empty",
       });
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err)
     return res
       .status(500)
@@ -176,21 +176,25 @@ module.exports.reserve_call = async (req, res) => {
         return res.status(200).send({ success: false, message: "The other person reserved in that time. Please select other day and time.", result: {} })
     }
 
-    passport.use(new GoogleStrategy({
-        clientID: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
-        clientSecret: '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',
-        callbackURL: "http://www.example.com/auth/google/callback"
-      },
-      function(accessToken, refreshToken, profile, cb) {
-        console.log(refreshToken)
-      }
-    ));
+    Meeting({
+      clientId: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
+      clientSecret: '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',
+      refreshToken: '1//04w_-jKqoz_IXCgYIARAAGAQSNwF-L9Iru_VtGmy3HgOMoATWlIrdOQm8CJm1YpWh1DNsh-fvNeERDZ2_fxBz6Dk1Kx5Y7zg1F2g',
+      date: "2022-12-01",
+      time: "10:59",
+      summary: 'summary',
+      location: 'Tunisia',
+      description: 'description'
+    }).then(function (result) {
+      sendEmail(client.email, "Video Call URL", result)
+      sendEmail('khaoulafattah4@gmail.com', "Video Call URL", result)
+      reserve = new CallReserve({
+        userId: client_id,
+        reserveTime
+      }).save();
+      res.status(200).send({ success: true, message: "Reserve successfully!", result: {} })
+    })
 
-    // reserve = new CallReserve({
-    //   userId: client_id,
-    //   reserveTime
-    // }).save();
-    // res.status(200).send({ success: true, message: "Reserve successfully!", result: {} })
   } catch (error) {
     console.log(error)
     res.status(500).send({ success: false, message: "Internal server error", error: error })
