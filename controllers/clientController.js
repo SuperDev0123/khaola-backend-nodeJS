@@ -186,13 +186,13 @@ module.exports.reserve_call = async (req, res) => {
       location: 'Tunisia',
       description: 'description'
     }).then(function (result) {
-      const url = `${process.env.BASE_URL}meeting/${result}`
-      sendEmail(client.email, "Video Call URL", url)
-      sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
       reserve = new CallReserve({
         userId: client_id,
         reserveTime
       }).save();
+      const url = `${process.env.BASE_URL}meeting?url=${result}&reserve=${reserve._id}`
+      sendEmail(client.email, "Video Call URL", url)
+      sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
       res.status(200).send({ success: true, message: "Reserve successfully!", result: {} })
     })
 
