@@ -190,7 +190,7 @@ module.exports.reserve_call = async (req, res) => {
         userId: client_id,
         reserveTime
       }).save();
-      const url = `${process.env.BASE_URL}meeting?url=${result}&reserve=${reserve._id}`
+      const url = `${process.env.BASE_URL}meeting?url=${result}&client=${client_id}`
       sendEmail(client.email, "Video Call URL", url)
       sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
       res.status(200).send({ success: true, message: "Reserve successfully!", result: {} })
