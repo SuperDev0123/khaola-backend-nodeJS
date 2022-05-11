@@ -33,6 +33,7 @@ router.route("/client/delete/:id").delete(catchErrors(clientController.delete));
 router.route("/client/search").get(catchErrors(clientController.search));
 router.route("/client/list").get(catchErrors(clientController.list));
 router.route("/client/my_list").get(isValidProvider, catchErrors(clientController.myList));
+router.route("/client/verify_list").get(isValidAdmin, catchErrors(clientController.verifyList));
 router.route("/client/register").post(isValidProvider, catchErrors(clientController.registerClient));
 router.route("/client/reset_verify").post(isValidAdmin, catchErrors(clientController.reset_verify));
 router.route("/client/reset_status").post(isValidProvider, catchErrors(clientController.reset_status));

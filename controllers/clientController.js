@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt")
 const crypto = require("crypto")
 const methods = require("./crudController");
 const moment = require("moment")
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const passport = require('passport')
 
 const providerModel = require("../models/Provider")
 const clientModel = require("../models/Client")
@@ -41,13 +43,52 @@ module.exports.myList = async (req, res) => {
   }
 }
 
+
+module.exports.verifyList = async (req, res) => {
+  try {
+    //  Query the database for a list of all results
+    const resultsPromise = clientModel.aggregate([{
+      $lookup: {
+        from: 'callreserves',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'callReserve'
+      }
+    }]).sort({ created: "desc" })
+    // Counting the total documents
+    const countPromise = clientModel.count();
+    // Resolving both promises
+    const [result, count] = await Promise.all([resultsPromise, countPromise]);
+    // Calculating total pages
+    if (count > 0) {
+      return res.status(200).json({
+        success: true,
+        result,
+        message: "Successfully found all clients",
+      });
+    } else {
+      return res.status(203).json({
+        success: false,
+        result: [],
+        message: "Collection is Empty",
+      });
+    }
+  } catch(err) {
+    console.log(err)
+    return res
+      .status(500)
+      .json({ success: false, result: [], message: "Oops there is an Error" });
+  }
+}
+
+
 module.exports.registerClient = async (req, res) => {
   try {
     const user = await clientModel.findOne({ email: req.body.email })
     if (user) {
       return res.status(406).json({ success: false, message: "Email already exist" })
     }
-    let client = new clientModel({...req.body, provider: req.user.id})
+    let client = new clientModel({ ...req.body, provider: req.user.id })
     await client.save(req.body, async (err, item) => {
       if (err) {
         res.status(406).json({ success: false, message: "Failed register" + err })
@@ -70,12 +111,12 @@ module.exports.registerClient = async (req, res) => {
 
 module.exports.reset_verify = async (req, res) => {
   try {
-    const { client_id } = req.body;
+    const { client_id, isVerified } = req.body;
     const client = await clientModel.findOne({ _id: client_id })
     if (!client)
       return res.status(200).send({ success: false, message: "Invalid Client" })
 
-    await clientModel.updateOne({ _id: client._id }, { isVerified: !client.isVerified })
+    await clientModel.updateOne({ _id: client._id }, { isVerified })
     let token = await Token.findOne({ userId: client_id })
     if (token) {
       await token.remove();
@@ -134,11 +175,22 @@ module.exports.reserve_call = async (req, res) => {
       else
         return res.status(200).send({ success: false, message: "The other person reserved in that time. Please select other day and time.", result: {} })
     }
-    reserve = new CallReserve({
-      userId: client_id,
-      reserveTime
-    }).save();
-    res.status(200).send({ success: true, message: "Reserve successfully!", result: {} })
+
+    passport.use(new GoogleStrategy({
+        clientID: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
+        clientSecret: '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',
+        callbackURL: "http://www.example.com/auth/google/callback"
+      },
+      function(accessToken, refreshToken, profile, cb) {
+        console.log(refreshToken)
+      }
+    ));
+
+    // reserve = new CallReserve({
+    //   userId: client_id,
+    //   reserveTime
+    // }).save();
+    // res.status(200).send({ success: true, message: "Reserve successfully!", result: {} })
   } catch (error) {
     console.log(error)
     res.status(500).send({ success: false, message: "Internal server error", error: error })
@@ -191,7 +243,7 @@ module.exports.verify_client = async (req, res) => {
     if (token) {
       await token.remove()
     }
-    await clientModel.updateOne({ _id: client._id }, { isVerified: true, firstName: "test", lastName: "test", birthDate: '1922-02-12' })
+    await clientModel.updateOne({ _id: client._id }, { isVerified: true })
     res.json({
       success: true,
       result: {},

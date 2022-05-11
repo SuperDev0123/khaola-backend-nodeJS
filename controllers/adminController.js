@@ -389,7 +389,7 @@ exports.search = async (req, res) => {
 exports.reserve_list = async (req, res) => {
   try {
     const date = req.query.page;
-    const reserveList = await CallReserve.find({ reserveTime: { $regex: '.*' + date + '.*' } }).populate('userId')
+    const reserveList = await CallReserve.find().populate('userId')
     res.status(200).send({ success: true, message: "", result: reserveList })
   } catch (error) {
     console.log(error)
