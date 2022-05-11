@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = jwt.sign(
         {
-          exp: '12h',
+          expiresIn: '12h',
           id: user._id,
           role,
         },
@@ -136,7 +136,7 @@ exports.verifyClient = async (req, res) => {
       const role = 'client';
       const token = jwt.sign(
         {
-          exp: '12h',
+          expiresIn: '12h',
           id: client._id,
           role,
         },

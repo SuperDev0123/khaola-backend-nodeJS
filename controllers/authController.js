@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+        expiresIn: '12h',
         id: admin._id,
       },
       process.env.JWT_SECRET
