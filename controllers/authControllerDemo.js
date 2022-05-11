@@ -31,14 +31,9 @@ exports.login = async (req, res) => {
       role = 'admin';
     }
     if (bcrypt.compareSync(req.body.password, user.password)) {
-      console.log({
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-        id: user._id,
-        role,
-      })
       const token = jwt.sign(
         {
-          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+          exp: '12h',
           id: user._id,
           role,
         },
@@ -141,7 +136,7 @@ exports.verifyClient = async (req, res) => {
       const role = 'client';
       const token = jwt.sign(
         {
-          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+          exp: '12h',
           id: client._id,
           role,
         },

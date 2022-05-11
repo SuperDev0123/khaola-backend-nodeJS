@@ -180,14 +180,15 @@ module.exports.reserve_call = async (req, res) => {
       clientId: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
       clientSecret: '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',
       refreshToken: '1//04w_-jKqoz_IXCgYIARAAGAQSNwF-L9Iru_VtGmy3HgOMoATWlIrdOQm8CJm1YpWh1DNsh-fvNeERDZ2_fxBz6Dk1Kx5Y7zg1F2g',
-      date: "2022-12-01",
-      time: "10:59",
+      date: moment(reserveTime).format('YYYY-MM-DD'),
+      time: moment(reserveTime).format('HH:mm'),
       summary: 'summary',
       location: 'Tunisia',
       description: 'description'
     }).then(function (result) {
-      sendEmail(client.email, "Video Call URL", result)
-      sendEmail('khaoulafattah4@gmail.com', "Video Call URL", result)
+      const url = `${process.env.BASE_URL}meeting/${result}`
+      sendEmail(client.email, "Video Call URL", url)
+      sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
       reserve = new CallReserve({
         userId: client_id,
         reserveTime
