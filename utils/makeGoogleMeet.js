@@ -2,6 +2,7 @@ const Meeting = require('google-meet-api').meet;
 const sendEmail = require("./sendEmail")
 
 require("dotenv").config({ path: ".variables.env" });
+const moment = require("moment")
 
 module.exports = (reserveTime) => {
 	return new Promise((resolve, reject) => {
