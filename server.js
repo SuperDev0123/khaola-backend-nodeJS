@@ -35,6 +35,19 @@ glob.sync("./models/*.js").forEach(function (file) {
 
 // Start our app!
 const app = require("./app");
+
+app.get('/auth/callback',
+  passport.authenticate('google', { failureRedirect: '/' })
+);
+
+app.get('/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'https://www.googleapis.com/auth/calendar'],
+    accessType: 'offline',
+    prompt: 'consent'
+  }
+  ));
+
 app.set("port", process.env.PORT || 80);
 const server = app.listen(app.get("port"), () => {
   console.log(`Express running → On PORT : ${server.address().port}`);
