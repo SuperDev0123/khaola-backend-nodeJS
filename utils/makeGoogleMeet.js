@@ -10,15 +10,17 @@ const moment = require("moment")
 module.exports = (reserveTime, client_id, email) => {
 	return new Promise((resolve, reject) => {
 		try {
+			console.log('try')
 			passport.use(new GoogleStrategy({
 				clientID: process.env.MEET_USER,
 				clientSecret: process.env.MEET_PASS,
 				callbackURL: `${process.env.HOME_URL}auth/callback`
 			},
 				function (accessToken, refreshToken, profile, cb) {
+					console.log('refresh token', refreshToken)
 					Meeting({
-						clientId: clientID,
-						clientSecret: clientSecret,
+						clientId: process.env.MEET_USER,
+						clientSecret: process.env.MEET_PASS,
 						refreshToken: refreshToken,
 						date: moment(reserveTime).format('YYYY-MM-DD'),
 						time: moment(reserveTime).format('HH:mm'),
