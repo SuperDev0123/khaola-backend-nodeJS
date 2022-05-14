@@ -5,7 +5,7 @@ const CallReserve = require("../models/CallReserve")
 require("dotenv").config({ path: ".variables.env" });
 const moment = require("moment")
 
-module.exports = (reserveTime, client_id) => {
+module.exports = (reserveTime, client_id, email) => {
 	return new Promise((resolve, reject) => {
 		try {
 			Meeting({
@@ -23,7 +23,7 @@ module.exports = (reserveTime, client_id) => {
 					reserveTime
 				}).save();
 				const url = `${process.env.BASE_URL}meeting?url=${result}&client=${client_id}`
-				sendEmail(client.email, "Video Call URL", url)
+				sendEmail(email, "Video Call URL", url)
 				sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
 				resolve({ success: true, message: "Reserve successfully!", result: {} })
 			})
