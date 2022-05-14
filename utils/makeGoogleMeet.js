@@ -5,7 +5,7 @@ const CallReserve = require("../models/CallReserve")
 require("dotenv").config({ path: ".variables.env" });
 const moment = require("moment")
 
-module.exports = (reserveTime) => {
+module.exports = (reserveTime, client_id) => {
 	return new Promise((resolve, reject) => {
 		try {
 			Meeting({

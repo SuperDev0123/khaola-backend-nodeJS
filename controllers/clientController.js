@@ -176,7 +176,7 @@ module.exports.reserve_call = async (req, res) => {
         return res.status(200).send({ success: false, message: "The other person reserved in that time. Please select other day and time.", result: {} })
     }
 
-    let result = await makeMeet(reserveTime);
+    let result = await makeMeet(reserveTime, client_id);
     res.status(200).send(result)
 
   } catch (error) {
