@@ -17,12 +17,17 @@ module.exports = (reserveTime, client_id, email) => {
 				summary: 'summary',
 				location: 'Tunisia',
 				description: 'description'
-			}).then(function (result) {
-				reserve = new CallReserve({
+			}).then(async function (meetingUrl) {
+				if(!meetingUrl){
+					resolve({ success: false, message: 'Creating Video Call Failed!', result: {} })
+					return;
+				}
+				reserve = await new CallReserve({
 					userId: client_id,
+					url: meetingUrl,
 					reserveTime
 				}).save();
-				const url = `${process.env.BASE_URL}meeting?url=${result}&client=${client_id}`
+				const url = `${process.env.BASE_URL}meeting?client=${client_id}&url=${meetingUrl}`
 				console.log('------meeting------>')
 				console.log(url)
 				sendEmail(email, "Video Call URL", url)

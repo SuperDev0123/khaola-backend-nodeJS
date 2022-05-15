@@ -10,6 +10,7 @@ const callreserveSchema = new Schema({
 	},
 	reserveTime: { type: String, required: true },
 	status: { type: Boolean, default: false },
+	url: { type: String },
 	createdAt: { type: Date, default: Date.now, expires: 3600 },//1hour
 });
 
