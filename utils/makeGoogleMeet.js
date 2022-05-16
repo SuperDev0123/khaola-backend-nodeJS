@@ -1,6 +1,8 @@
 const Meeting = require('google-meet-api').meet;
 const sendEmail = require("./sendEmail")
 const CallReserve = require("../models/CallReserve")
+const schedule = require('node-schedule');
+
 
 require("dotenv").config({ path: ".variables.env" });
 const moment = require("moment")
@@ -18,7 +20,7 @@ module.exports = (reserveTime, client_id, email) => {
 				location: 'Tunisia',
 				description: 'description'
 			}).then(async function (meetingUrl) {
-				if(!meetingUrl){
+				if (!meetingUrl) {
 					resolve({ success: false, message: 'Creating Video Call Failed!', result: {} })
 					return;
 				}
@@ -32,6 +34,11 @@ module.exports = (reserveTime, client_id, email) => {
 				console.log(url)
 				sendEmail(email, "Video Call URL", url)
 				sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
+				let remindTime = new Date(`${moment(reserveTime).format('YYYY-MM-DD')} 08:00`).setHours(8);
+				console.log('remind time', remindTime)
+				schedule.scheduleJob(remindTime, function () {
+					sendEmail(email, "Video Call URL", url)
+				});
 				resolve({ success: true, message: "Reserve successfully!", result: {} })
 			})
 		} catch (err) {
