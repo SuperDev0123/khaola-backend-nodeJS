@@ -40,6 +40,7 @@ router.route("/client/reset_status").post(isValidProvider, catchErrors(clientCon
 router.route("/client/reserve/list").get(isValidClient, catchErrors(clientController.reserve_list));
 router.route("/client/reserve_call").post(isValidClient, catchErrors(clientController.reserve_call));
 router.route("/client/verify").post(isValidClient, catchErrors(clientController.verify_client));
+router.route("/client/reject").get(isValidClient, catchErrors(clientController.reject_client));
 router.route("/client/is_verify").get(isValidClient, catchErrors(clientController.is_verify));
 
 //_____________________________________ API for providers ___________________________
