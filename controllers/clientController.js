@@ -242,3 +242,28 @@ module.exports.verify_client = async (req, res) => {
     res.status(500).send({ success: false, message: "Internal server error", error: error })
   }
 };
+
+
+module.exports.reject_client = async (req, res) => {
+  try {
+    const client_id = req.user.id;
+    const client = await clientModel.findOne({ _id: client_id })
+    if (!client)
+      return res.status(400).send({ success: false, message: "Invalid link" })
+    const token = await Token.findOne({
+      userId: client._id,
+    });
+    if (token) {
+      await token.remove()
+    }
+    await clientModel.updateOne({ _id: client._id }, { isRejected: true })
+    res.json({
+      success: true,
+      result: {},
+      message: "You are rejected",
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ success: false, message: "Internal server error", error: error })
+  }
+};

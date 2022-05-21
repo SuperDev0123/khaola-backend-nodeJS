@@ -64,6 +64,10 @@ const clientSchema = new Schema({
     type: Boolean,
     default: false,
   },  
+  isRejected: {
+    type: Boolean,
+    default: false,
+  },  
   provider: {
 		type: Schema.Types.ObjectId,
 		required: true,
