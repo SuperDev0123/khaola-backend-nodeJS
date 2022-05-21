@@ -196,7 +196,7 @@ module.exports.is_verify = async (req, res) => {
       if (moment(reserve.reserveTime) > moment(new Date())) {
         return res.json({
           success: true,
-          result: { verify: false, reserved: true },
+          result: { verify: false, reserved: true, rejected: client.isRejected },
           message: "Email Verify Successfully.",
         });
       }
@@ -204,7 +204,7 @@ module.exports.is_verify = async (req, res) => {
     }
     res.json({
       success: true,
-      result: { verify: client.isVerified, reserved: false },
+      result: { verify: client.isVerified, reserved: false, rejected: client.isRejected },
       message: "",
     });
   } catch (error) {
