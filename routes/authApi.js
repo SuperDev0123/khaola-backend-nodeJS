@@ -23,7 +23,7 @@ router.route("/meeting").post(catchErrors(inMeeting))
 router.route("/logout").post(isValidToken, catchErrors(logout));
 router.route("/test").post((req, res)=>{
   const { url } = req.body;
-  request(proxyOption, async (error, response, html) => {
+  request(url, async (error, response, html) => {
     res.json({error, response, html});
   })
 
