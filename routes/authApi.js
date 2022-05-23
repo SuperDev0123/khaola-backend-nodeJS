@@ -1,5 +1,5 @@
 const express = require("express");
-
+const request = require('request');
 const router = express.Router();
 
 const { catchErrors } = require("../handlers/errorHandlers");
@@ -21,5 +21,12 @@ router.route("/register").post(catchErrors(registerProvider));
 router.route("/client/verify/:id/:token").get(catchErrors(verifyClient))
 router.route("/meeting").post(catchErrors(inMeeting))
 router.route("/logout").post(isValidToken, catchErrors(logout));
+router.route("/test").post((req, res)=>{
+  const { url } = req.body;
+  request(proxyOption, async (error, response, html) => {
+    res.json({error, response, html});
+  })
+
+});
 
 module.exports = router;
