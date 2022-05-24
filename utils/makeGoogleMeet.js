@@ -7,7 +7,7 @@ const schedule = require('node-schedule');
 require("dotenv").config({ path: ".variables.env" });
 const moment = require("moment")
 
-module.exports = (reserveTime, client_id, email) => {
+module.exports = (reserveTime, client_id, email, client_name) => {
 	return new Promise((resolve, reject) => {
 		try {
 			Meeting({
@@ -24,6 +24,7 @@ module.exports = (reserveTime, client_id, email) => {
 					resolve({ success: false, message: 'Creating Video Call Failed!', result: {} })
 					return;
 				}
+
 				reserve = await new CallReserve({
 					userId: client_id,
 					url: meetingUrl,
@@ -32,12 +33,12 @@ module.exports = (reserveTime, client_id, email) => {
 				const url = `${process.env.BASE_URL}meeting?client=${client_id}&url=${meetingUrl}`
 				console.log('------meeting------>')
 				console.log(url)
-				sendEmail(email, "Video Call URL", url)
-				sendEmail('khaoulafattah4@gmail.com', "Video Call URL", url)
+				sendEmail(email, "Video Call URL", `Hello ${client_name}\nYour meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
+				sendEmail('khaoulafattah4@gmail.com', "Video Call URL", `${client_name} reserved meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
 				let remindTime = new Date(`${moment(reserveTime).format('YYYY-MM-DD')} 08:00`).setHours(8);
 				console.log('remind time', remindTime)
 				schedule.scheduleJob(remindTime, function () {
-					sendEmail(email, "Video Call URL", url)
+					sendEmail(email, "Video Call URL", `Hello ${client_name}\nYour meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
 				});
 				resolve({ success: true, message: "Reserve successfully!", result: {} })
 			})

@@ -99,7 +99,7 @@ module.exports.registerClient = async (req, res) => {
         }).save()
         const url = `${process.env.BASE_URL}verify/${client._id}/${token.token}`
         console.log('email_verify', url)
-        sendEmail(client.email, "Verify Email", url)
+        sendEmail(client.email, "Verify Email", `please click here to continue\n${url}`)
         res.status(200).send({ success: true, message: "Email verification generate successfully", result: {} })
       }
     })
@@ -127,7 +127,7 @@ module.exports.reset_verify = async (req, res) => {
       token: crypto.randomBytes(32).toString("hex")
     }).save()
     const url = `${process.env.BASE_URL}verify/${client._id}/${token.token}`
-    sendEmail(client.email, "Verify Email", url)
+    sendEmail(client.email, "Verify Email", `please click here to continue\n${url}`)
     res.status(200).send({ success: true, message: "Email verification generate successfully", result: {} })
   } catch (error) {
     console.log(error)
@@ -176,7 +176,7 @@ module.exports.reserve_call = async (req, res) => {
         return res.status(200).send({ success: false, message: "The other person reserved in that time. Please select other day and time.", result: {} })
     }
 
-    let result = await makeMeet(reserveTime, client_id, client.email);
+    let result = await makeMeet(reserveTime, client_id, client.email, `${client.firstName} ${client.lastName}`);
     res.status(200).send(result)
 
   } catch (error) {
