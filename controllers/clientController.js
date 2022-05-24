@@ -216,8 +216,8 @@ module.exports.is_verify = async (req, res) => {
 module.exports.verify_client = async (req, res) => {
   try {
     const client_id = req.user.id;
-    const userInfo = req.body.userInfo;
-    console.log(userInfo)
+    // const userInfo = req.body.userInfo;
+    // console.log(userInfo)
     const client = await clientModel.findOne({ _id: client_id })
     if (!client)
       return res.status(400).send({ success: false, message: "Invalid link" })
