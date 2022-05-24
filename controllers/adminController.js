@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Admin = mongoose.model("Admin");
 const CallReserve = require("../models/CallReserve")
+const clientModel = require("../models/Client")
+const Token = require("../models/Token")
 
 /**
  *  Get all documents of a Model
@@ -391,6 +393,33 @@ exports.reserve_list = async (req, res) => {
     const date = req.query.page;
     const reserveList = await CallReserve.find().populate('userId')
     res.status(200).send({ success: true, message: "", result: reserveList })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ success: false, message: "Internal server error", error: error })
+  }
+};
+
+
+module.exports.verify_client = async (req, res) => {
+  try {
+    const client_id = req.body.id;
+    const is_verify = req.body.is_verify;
+    const updateVal = is_verify ? { isVerified: true, isRejected: false } : { isVerified: false, isRejected: true }
+    const client = await clientModel.findOne({ _id: client_id })
+    if (!client)
+      return res.status(400).send({ success: false, message: "Invalid link" })
+    const token = await Token.findOne({
+      userId: client._id,
+    });
+    if (token) {
+      await token.remove()
+    }
+    await clientModel.updateOne({ _id: client._id }, updateVal)
+    res.json({
+      success: true,
+      result: {},
+      message: `Client is ${is_verify ? 'verified' : 'rejected'} successfully.`,
+    });
   } catch (error) {
     console.log(error)
     res.status(500).send({ success: false, message: "Internal server error", error: error })

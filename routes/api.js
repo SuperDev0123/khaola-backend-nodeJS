@@ -20,6 +20,7 @@ router.route("/admin/delete/:id").delete(catchErrors(adminController.delete));
 router.route("/admin/search").get(catchErrors(adminController.search));
 router.route("/admin/list").get(catchErrors(adminController.list));
 router.route("/admin/reserve/list").get(isValidAdmin, catchErrors(adminController.reserve_list));
+router.route("/admin/verify_client").post(isValidAdmin, catchErrors(adminController.verify_client));
 router
   .route("/admin/password-update/:id")
   .patch(catchErrors(adminController.updatePassword));
