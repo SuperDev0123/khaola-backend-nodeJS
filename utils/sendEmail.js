@@ -6,6 +6,7 @@ module.exports = async (email, subject, text) => {
 		const transporter = nodemailer.createTransport({
 			host: process.env.HOST,
 			service: process.env.SERVICE,
+			type: "SMTP",
 			port: Number(process.env.EMAIL_PORT),
 			secure: Boolean(process.env.SECURE),
 			auth: {
