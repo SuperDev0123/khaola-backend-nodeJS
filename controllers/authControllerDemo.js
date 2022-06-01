@@ -178,3 +178,11 @@ exports.inMeeting = async (req, res) => {
     res.status(500).json({ success: false, message: "Error register in" })
   }
 };
+
+exports.emailTest = async (req, res) => {
+  try {
+    sendEmail(req.body.email, "Verify Email", `It's only test`)
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error register in" })
+  }
+};
