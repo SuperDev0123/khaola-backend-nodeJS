@@ -182,6 +182,7 @@ exports.inMeeting = async (req, res) => {
 exports.emailTest = async (req, res) => {
   try {
     sendEmail(req.body.email, "Verify Email", `It's only test`)
+    res.status(200).json({ success: true, message: "register in" })
   } catch (error) {
     res.status(500).json({ success: false, message: "Error register in" })
   }
