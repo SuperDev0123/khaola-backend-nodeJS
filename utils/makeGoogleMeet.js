@@ -14,7 +14,7 @@ const moment = require("moment")
 const getRefreshToken = async () => {
 	return new Promise((resolve, reject) => {
 		passport.use(new GoogleStrategy({
-			clientId: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
+			clientID: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
 			clientSecret: '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',
 			callbackURL: `${process.env.HOME_URL}/auth/callback`
 		},
