@@ -29,6 +29,8 @@ const getRefreshToken = async () => {
 module.exports = (reserveTime, client_id, email, client_name) => {
 	return new Promise((resolve, reject) => {
 		try {
+			let refresh_token = await getRefreshToken();
+			console.log(refresh_token);
 			Meeting({
 				clientId: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
 				clientSecret: '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',
