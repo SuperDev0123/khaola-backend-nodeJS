@@ -11,6 +11,7 @@ const authApiRouter = require("./routes/authApi");
 const errorHandlers = require("./handlers/errorHandlers");
 
 const { isValidToken } = require("./controllers/authController");
+const passport = require('passport');
 
 require("dotenv").config({ path: ".variables.env" });
 
@@ -71,6 +72,17 @@ app.use("/api", authApiRouter);
 // for development & production don't use this line app.use("/api", apiRouter); , this is just demo login contoller
 app.use("/api", apiRouter);
 
+app.get('/auth/callback',
+    passport.authenticate('google', { failureRedirect: '/' })
+);
+
+app.get('/auth/google',
+    passport.authenticate('google', {
+        scope: ['profile','https://www.googleapis.com/auth/calendar'],
+        accessType: 'offline',
+        prompt: 'consent'
+    }
+    ));
 //uncomment line below // app.use("/api", isValidToken, apiRouter);
 // app.use("/api", isValidToken, apiRouter);
 

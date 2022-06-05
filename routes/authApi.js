@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require('request');
 const router = express.Router();
+const makeMeet = require("../utils/makeGoogleMeet")
 
 const { catchErrors } = require("../handlers/errorHandlers");
 const {
@@ -21,13 +22,16 @@ router.route("/register").post(catchErrors(registerProvider));
 router.route("/client/verify/:id/:token").get(catchErrors(verifyClient))
 router.route("/meeting").post(catchErrors(inMeeting))
 router.route("/logout").post(isValidToken, catchErrors(logout));
-router.route("/test").post((req, res)=>{
+router.route("/test").post((req, res) => {
   const { url } = req.body;
   request(url, async (error, response, html) => {
-    res.json({error, response, html});
+    res.json({ error, response, html });
   })
 
 });
 router.route("/email").post(catchErrors(emailTest));
+router.route("/googleMeet").post(catchErrors(()=>{
+  makeMeet(new Date('2022-06-15'));
+}));
 
 module.exports = router;
