@@ -27,7 +27,7 @@ const getRefreshToken = async () => {
 }
 
 module.exports = (reserveTime, client_id, email, client_name) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		try {
 			let refresh_token = await getRefreshToken();
 			console.log(refresh_token);
