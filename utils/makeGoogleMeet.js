@@ -29,12 +29,11 @@ const getRefreshToken = async () => {
 module.exports = (reserveTime, client_id, email, client_name) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let refresh_token = await getRefreshToken();
 			console.log(refresh_token);
 			Meeting({
 				clientId: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
 				clientSecret: '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',
-				refreshToken: '1//04xLHlHzz0aR1CgYIARAAGAQSNwF-L9IrfnQbRlLuN9E6VtK_ObOhFTmjUQPmhgyGBr5UBTM1n25PdA8m3MDPJsJuA2xq7KDC28Q',
+				refreshToken: '1//04CXULQ8hYMSDCgYIARAAGAQSNwF-L9IrZP8m6QFu205YlyUuvizJ_YowsrsJ-dmG5pdOeKpA2CwKCTiFJKML69o8H1api1NiBEw',
 				date: moment(reserveTime).format('YYYY-MM-DD'),
 				time: moment(reserveTime).format('HH:mm'),
 				summary: 'summary',
@@ -46,21 +45,21 @@ module.exports = (reserveTime, client_id, email, client_name) => {
 					return;
 				}
 
-				// reserve = await new CallReserve({
-				// 	userId: client_id,
-				// 	url: meetingUrl,
-				// 	reserveTime
-				// }).save();
-				// const url = `${process.env.BASE_URL}meeting?client=${client_id}&url=${meetingUrl}`
-				// console.log('------meeting------>')
-				// console.log(url)
-				// sendEmail(email, "Video Call URL", `Hello ${client_name}\nYour meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
-				// sendEmail('khaoulafattah4@gmail.com', "Video Call URL", `${client_name} reserved meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
-				// let remindTime = new Date(`${moment(reserveTime).format('YYYY-MM-DD')} 08:00`).setHours(8);
-				// console.log('remind time', remindTime)
-				// schedule.scheduleJob(remindTime, function () {
-				// 	sendEmail(email, "Video Call URL", `Hello ${client_name}\nYour meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
-				// });
+				reserve = await new CallReserve({
+					userId: client_id,
+					url: meetingUrl,
+					reserveTime
+				}).save();
+				const url = `${process.env.BASE_URL}meeting?client=${client_id}&url=${meetingUrl}`
+				console.log('------meeting------>')
+				console.log(url)
+				sendEmail(email, "Video Call URL", `Hello ${client_name}\nYour meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
+				sendEmail('khaoulafattah4@gmail.com', "Video Call URL", `${client_name} reserved meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
+				let remindTime = new Date(`${moment(reserveTime).format('YYYY-MM-DD')} 08:00`).setHours(8);
+				console.log('remind time', remindTime)
+				schedule.scheduleJob(remindTime, function () {
+					sendEmail(email, "Video Call URL", `Hello ${client_name}\nYour meeting is on ${moment(reserveTime).format('YYYY-MM-DD HH:mm')}\n This is the google meet link \n${url}\nClick here when its time`)
+				});
 				resolve({ success: true, message: "Reserve successfully!", result: {} })
 			})
 		} catch (err) {
