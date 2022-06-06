@@ -34,10 +34,11 @@ module.exports = (reserveTime, client_id, email, client_name) => {
 				clientSecret: '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',
 				refreshToken: '1//04qVKo6iueOYjCgYIARAAGAQSNwF-L9IrZQ2fW4LJjiE8gF4Oo1bgNhW3ruM0M6e8f8fcoM3VGzTaudW7eIMp4pTigSg5utCFyCA',
 				date: moment(reserveTime).format('YYYY-MM-DD'),
-				time: moment(reserveTime).format('HH:mm'),
-				summary: 'summary',
+				time: moment(reserveTime).format('HH:mm'),				
 				location: 'Tunisia',
-				description: 'description'
+				description: 'description',
+				organizer: "khaoulafattah4@gmail.com",
+				inviter: email,
 			}).then(async function (meetingUrl) {
 				if (!meetingUrl) {
 					resolve({ success: false, message: 'Creating Video Call Failed!', result: {} })
