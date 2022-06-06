@@ -30,9 +30,9 @@ module.exports = (reserveTime, client_id, email, client_name) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			Meeting({
-				clientId: '250596494632-ji2l83g3ukilh1808nenn3mtfne1634o.apps.googleusercontent.com',
-				clientSecret: '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',
-				refreshToken: '1//04CXULQ8hYMSDCgYIARAAGAQSNwF-L9IrZP8m6QFu205YlyUuvizJ_YowsrsJ-dmG5pdOeKpA2CwKCTiFJKML69o8H1api1NiBEw',
+				clientId: '24487777005-g8tjp8384je8tv6k50i5pmi9a15qo6nm.apps.googleusercontent.com',
+				clientSecret: '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',
+				refreshToken: '1//04qVKo6iueOYjCgYIARAAGAQSNwF-L9IrZQ2fW4LJjiE8gF4Oo1bgNhW3ruM0M6e8f8fcoM3VGzTaudW7eIMp4pTigSg5utCFyCA',
 				date: moment(reserveTime).format('YYYY-MM-DD'),
 				time: moment(reserveTime).format('HH:mm'),
 				summary: 'summary',
